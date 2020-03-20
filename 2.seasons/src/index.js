@@ -8,13 +8,14 @@ import ReactDOM from 'react-dom';
 
 //Example of class-based component;
 class App extends React.Component {
-    render() {
+    constructor(props) {
+        super(props); //props provided as params for parent constructor
+        this.state = { lat: null };
+    
         window.navigator.geolocation.getCurrentPosition(
-            // 2 arguments, each a separate callback function
-            //first argument function callback that gets called
-            //every time the function successfully gets the user position.
-            (position) => console.log(position),
-            //failure callback - called every time first one fails
+            (position) => {
+                this.setState({lat: position.coords.latitude});
+            },
             (err) => console.log(err)
         );
 
@@ -26,7 +27,12 @@ class App extends React.Component {
         //         console.log(position);
         //     }
         // });
-        return <div>Latitude: </div>;
+    }
+
+    //React requires us to define render
+    render() {
+       
+        return <div>Latitude: {this.state.lat} </div>;
     }
 }
 
