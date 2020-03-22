@@ -1,34 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import SeasonDisplay from './SeasonDisplay';
 //Example of functional component;
 // const App = () => {
 //     return <div>Hi there!</div>;
 // };
 
-//Example of class-based component;
+//everytime we reset the state, the app component rerender
 class App extends React.Component {
     constructor(props) {
-        super(props); //props provided as params for parent constructor
+        super(props); 
         this.state = { lat: null, errorMessage: '' };
-
-
+        
     }
+    //Optionally, the state initialization could be here
+    //state = { lat: null, errorMessage: '' };
+    //with no constructor declared
 
     componentDidMount() {
         window.navigator.geolocation.getCurrentPosition(
             (position) => this.setState({ lat: position.coords.latitude }),
             (err) => this.setState({ errorMessage: err.message })
         );
-
-        //Above code is equivalent to
-        // function (err, position) {
-        //     if(err) {
-        //         console.log(err);
-        //     } else {
-        //         console.log(position);
-        //     }
-        // });
     }
 
     //LIFECYCLE METHODS
@@ -40,11 +33,7 @@ class App extends React.Component {
 
     //React requires us to define render
     render() {
-        return <div>
-            Latitude: {this.state.lat}
-            <br />
-            Error: {this.state.errorMessage}
-        </div>
+        return <SeasonDisplay lat={this.state.lat} />
     };
 }
 
