@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import SeasonDisplay from './SeasonDisplay';
+import Spinner from './Spinner';
+
 //Example of functional component;
 // const App = () => {
 //     return <div>Hi there!</div>;
@@ -9,9 +11,9 @@ import SeasonDisplay from './SeasonDisplay';
 //everytime we reset the state, the app component rerender
 class App extends React.Component {
     constructor(props) {
-        super(props); 
+        super(props);
         this.state = { lat: null, errorMessage: '' };
-        
+
     }
     //Optionally, the state initialization could be here
     //state = { lat: null, errorMessage: '' };
@@ -19,8 +21,8 @@ class App extends React.Component {
 
     componentDidMount() {
         window.navigator.geolocation.getCurrentPosition(
-            (position) => this.setState({ lat: position.coords.latitude }),
-            (err) => this.setState({ errorMessage: err.message })
+            position => this.setState({ lat: position.coords.latitude }),
+            err => this.setState({ errorMessage: err.message })
         );
     }
 
@@ -33,7 +35,15 @@ class App extends React.Component {
 
     //React requires us to define render
     render() {
-        return <SeasonDisplay lat={this.state.lat} />
+        if (this.state.errorMessage && !this.state.lat) {
+            return <div>Error: {this.state.errorMessage}</div>;
+        }
+
+        if (!this.state.errorMessage && this.state.lat) {
+            return <SeasonDisplay lat={this.state.lat} />;
+        }
+
+        return <Spinner />;
     };
 }
 
